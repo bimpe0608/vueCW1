@@ -18,9 +18,9 @@
     />
   </head>
   <body>
-    <div id="app" class="font-sans bg-white-100">
+  <div id="app" class="font-sans bg-white-100">
 
-        <!-- Nav bar -->
+    <!-- Nav bar -->
       <div class="nav">
         <!-- logo -->
         <div class="logo">{{logo}}</div>
@@ -43,7 +43,7 @@
         </button>
       </div>
 
-      <div class="flex flex-col md:flex-row h-screen bg-gray-200">
+    <div class="flex flex-col md:flex-row h-screen bg-gray-200">
         <!-- Sidebar -->
         <div class="w-full md:w-64 bg-white p-4">
           <h1 class="text-2xl font-bold mb-4">Filters</h1>
@@ -142,8 +142,94 @@
               </label>
             </div>
           </div>
-        </div>
+        </div> 
 
+    <!-- Main Content -->
+        <div class="flex-1 p-8">
+          <!-- Card Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <!-- Display all products -->
+            <div
+              v-for="product in sortedProductList"
+              :key="product.id"
+              class="bg-white p-4 rounded-lg shadow-md"
+            >
+              <img
+                v-bind:src="product.imagePath"
+                alt="product.subject"
+                class="mb-4 rounded-md"
+              />
+              <h3 class="text-xl font-semibold mb-2">
+                Subject: {{product.subject}}
+              </h3>
+              <p class="text-gray-600 mb-4">Location: {{product.location}}</p>
+              <p class="text-gray-600 mb-4">Price: £{{product.price}}</p>
+              <p class="text-gray-600 mb-4">
+                Availability:
+                <strong style="color: black">{{product.availability}}</strong>
+              </p>
+              <p class="text-gray-600 mb-4">Category: {{product.category}}</p>
+
+              <!-- Add to cart button -->
+              <button
+                class="bg-orange-500 text-white py-2 px-4 rounded"
+                v-on:click="addToCart(product)"
+                :disabled="product.availability === 0"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          products: products,
+          logo: "Tutor's Corner",
+
+          displayProducts: true,
+
+          // Cart
+          cart: [],
+          sort: {
+            sortBy: "subject",
+            orderBy: "ascending",
+          },
+        },
+
+        methods: {
+          // To add items to cart
+          addToCart(product) {
+            if (product.availability > 0) {
+              // Add the lesson to the cart
+              this.cart.push(product);
+
+              // Reduce the remaining space by one
+              product.availability -= 1;
+            }
+          },
+        },
+
+        computed: {
+          // Returns length of the cart items and an empty string if cart is empty
+          cartCount: function () {
+            return this.cart.length || "";
+          },
+
+          sortedProductList(products, sort) {
+            return this.products.sort((a, b) => {
+              const order = this.orderBy === "ascending" ? 1 : -1;
+              return a[this.sortBy] > b[this.sortBy] ? order : -order;
+            });
+          },
+        },
+      });
+    </script>
 
     
 
