@@ -63,10 +63,7 @@
                 Subject: {{product.subject}}
               </h3>
               <p class="text-gray-600 mb-4">Price: £{{product.price}}</p>
-              <p class="text-gray-600 mb-4">
-                Availability:
-                <strong style="color: black">{{product.availability}}</strong>
-              </p>
+    
 
               <!-- Add to cart button -->
               <button
@@ -166,8 +163,10 @@
                 <input
                   type="radio"
                   class="form-radio text-blue-500"
-                  name="sortBy"
-                  value="latest"
+                  v-model="sort.orderBy"
+                  name="orderBy"
+                  value="ascending"
+                  name="orderRadio"
                 />
                 <span class="ml-2">Ascending</span>
               </label>
@@ -176,8 +175,10 @@
                 <input
                   type="radio"
                   class="form-radio text-blue-500"
-                  name="sortBy"
-                  value="latest"
+                  v-model="sort.orderBy"
+                  name="orderBy"
+                  value="descending"
+                  name="orderRadio"
                 />
                 <span class="ml-2">Descending</span>
               </label>
@@ -265,24 +266,19 @@
             this.cartPage = !this.cartPage;
           },
 
-           removeFromCart: function (product) {
+          removeFromCart: function (product) {
          // Increase the availability of the removed product
-      product.availability += 1;
+         product.availability += 1;
 
-        // Remove the product from the cart
-        this.cart.splice(this.cart.indexOf(product), 1);
-           
-    },
-
-           addBackToProductList(product) {
-            // Add the product back to the product list
-            this.products.push(product);
-           }
-
-           
-
-           
+         // Remove the product from the cart
+         this.cart.splice(this.cart.indexOf(product), 1);
         },
+
+    //     addBackToProductList(product) {
+    //     // Add the product back to the product list
+    //     this.products.push(product);
+    // }
+},
 
         computed: {
           // Returns length of the cart items and an empty string if cart is empty
