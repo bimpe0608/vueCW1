@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tutor's Corner</title>
-    <link rel="icon" type="image/x-icon" href="./Images/logo.png" />
+    <link rel="icon" type="image/x-icon" href="./Images/tc.png" />
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
     <script src="./lessons.js"></script>
     <link rel="stylesheet" href="./style.css" />
@@ -85,28 +85,21 @@
     <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
     <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-    <input type="text" id="name" type="text" name="name" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <input type="text" v-model="checkoutFormInfo.name" id="name" type="text" name="name" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
        </div>
         <div>
     <label for="small-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone Number</label>
-    <input type="text" id="phone" type="text" name="phone" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <input type="text" v-model="checkoutFormInfo.phone" id="phone" type="text" name="phone" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
        </div>
     </div>
 
-    <button class="bg-orange-500 text-white py-2 px-4 rounded" v-on:click="removeFromCart(product)">Place Order</button>
+    <button class="bg-orange-500 text-white py-2 px-4 rounded" v-on:click="checkout" :disabled="!isValidCheckout">Place Order</button>
               </form>
 
             <!-- End of Checkout Form -->
-              
-
             </div>
             </div>
-        </div>
-
-        
-
-
-        
+        </div>    
     </div>
     <!-- End of cart page -->
 
@@ -277,6 +270,11 @@
             orderBy: "ascending",
           },
           searchQuery: "",
+          checkoutFormInfo: {
+                    name: '',
+                    phone: '',
+                },
+          orderConfirmed: false,
         },
         
 
@@ -305,6 +303,7 @@
          this.cart.splice(this.cart.indexOf(product), 1);
         },
 
+        // Search Products 
         searchProducts() {
         const query = this.searchQuery.toLowerCase().trim();
 
@@ -316,6 +315,15 @@
             );
         });
     },
+
+    // Checkout
+    checkout() {
+       if (this.isValidCheckout) {
+        // Display a message confirming the order submission
+        this.orderConfirmed = true;
+        alert("Order Confirmed!");
+    }
+},
 },
 
         computed: {
@@ -324,12 +332,21 @@
             return this.cart.length || "";
           },
 
+        //   Diaplays All Sorted Products
           sortedProductList(products, sort) {
             return this.products.sort((a, b) => {
               const order = this.sort.orderBy === "ascending" ? 1 : -1;
               return a[this.sort.sortBy] > b[this.sort.sortBy] ? order : -order;
             });
           },
+
+        // Checks if checkout is valid
+          isValidCheckout() {
+            // Checks name and phone number values
+            const nameRegex = /^[a-zA-Z\s]+$/;
+            const phoneRegex = /^[+0-9()\- ]+$/;
+               return nameRegex.test(this.checkoutFormInfo.name) && phoneRegex.test(this.checkoutFormInfo.phone);
+            },
         },
       });
     </script>
