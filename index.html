@@ -35,18 +35,52 @@
         <!-- button -->
         <button v-on:click="toggleTo"
           class="bg-orange-500 text-white py-2 px-4 rounded"
-          :disabled="cart.length === 0"
+          :disabled="cart.length === 0" 
         >
           <i class="fa-sharp fa fa-cart-shopping" style="color: white"></i>
             {{ cartCount}}</i
           >
         </button>
       </div>
+      <!-- End of nav bar -->
 
     <!-- Cart Page -->
     <div v-if="cartPage">
-        <h1>CART PAGE</h1>
+        <div class="flex flex-col md:flex-row h-screen bg-white-200">
+            <!-- Cart Content -->
+        <div class="flex-1 p-8">
+          <!-- Card Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+           
+            <!-- Display cart products -->
+            <div
+              v-for="product in cart"
+              :key="product.id"
+              class="bg-white p-4 rounded-lg shadow-md"
+            >
+        
+              <h3 class="text-xl font-semibold mb-2">
+                Subject: {{product.subject}}
+              </h3>
+              <p class="text-gray-600 mb-4">Price: £{{product.price}}</p>
+              <p class="text-gray-600 mb-4">
+                Availability:
+                <strong style="color: black">{{product.availability}}</strong>
+              </p>
+
+              <!-- Add to cart button -->
+              <button
+                class="bg-orange-500 text-white py-2 px-4 rounded"
+                v-on:click="removeFromCart(product, cart)"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+        </div>
     </div>
+    <!-- End of cart page -->
 
     <!-- Product Page -->
     <div class="productPage" v-if="!cartPage">
@@ -157,7 +191,7 @@
         <div class="flex-1 p-8">
           <!-- Card Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Card 1 -->
+        
             <!-- Display all products -->
             <div
               v-for="product in sortedProductList"
@@ -183,7 +217,7 @@
               <!-- Add to cart button -->
               <button
                 class="bg-orange-500 text-white py-2 px-4 rounded"
-                v-on:click="addToCart(product)"
+                v-on:click="addToCart(product, cart)"
                 :disabled="product.availability === 0"
               >
                 Add to Cart
@@ -194,6 +228,7 @@
         </div>
     
       </div>
+      <!-- End of product page -->
   </div>
    
 
@@ -203,8 +238,6 @@
         data: {
           products: products,
           logo: "Tutor's Corner",
-
-        //   productPage: "products",
           cartPage: false,
 
           // Cart
@@ -227,9 +260,14 @@
             }
           },
 
+        
           toggleTo() {
             this.cartPage = !this.cartPage;
-          }
+          },
+
+           removeFromCart: function (product, cart) {
+                    this.cart.splice(this.cart.indexOf(product), 1);
+           }
         },
 
         computed: {
@@ -240,8 +278,8 @@
 
           sortedProductList(products, sort) {
             return this.products.sort((a, b) => {
-              const order = this.orderBy === "ascending" ? 1 : -1;
-              return a[this.sortBy] > b[this.sortBy] ? order : -order;
+              const order = this.sort.orderBy === "ascending" ? 1 : -1;
+              return a[this.sort.sortBy] > b[this.sort.sortBy] ? order : -order;
             });
           },
         },
