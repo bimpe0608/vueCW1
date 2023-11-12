@@ -71,7 +71,7 @@
               <!-- Add to cart button -->
               <button
                 class="bg-orange-500 text-white py-2 px-4 rounded"
-                v-on:click="removeFromCart(product, cart)"
+                v-on:click="removeFromCart(product)"
               >
                 Remove
               </button>
@@ -265,9 +265,23 @@
             this.cartPage = !this.cartPage;
           },
 
-           removeFromCart: function (product, cart) {
-                    this.cart.splice(this.cart.indexOf(product), 1);
+           removeFromCart: function (product) {
+         // Increase the availability of the removed product
+      product.availability += 1;
+
+        // Remove the product from the cart
+        this.cart.splice(this.cart.indexOf(product), 1);
+           
+    },
+
+           addBackToProductList(product) {
+            // Add the product back to the product list
+            this.products.push(product);
            }
+
+           
+
+           
         },
 
         computed: {
