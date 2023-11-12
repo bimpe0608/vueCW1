@@ -5,3 +5,7 @@ Front-End of a make-believe web app that enables students and their parents to p
 # Link to repository
 
 https://github.com/bimpe0608/vueCW1.git
+
+# Link to GitHub Pages
+
+https://bimpe0608.github.io/vueCW1/
