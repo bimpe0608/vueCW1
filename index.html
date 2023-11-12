@@ -30,6 +30,7 @@
             type="text"
             placeholder="Search Lesson"
             class="w-full p-2 border border-gray-300 rounded mr-2"
+            v-model="searchQuery" v-on:input="searchProducts"
           />
         </div>
         <!-- button -->
@@ -201,7 +202,7 @@
             >
               <img
                 v-bind:src="product.imagePath"
-                alt="product.subject"
+                :alt="product.subject"
                 class="mb-4 rounded-md"
               />
               <h3 class="text-xl font-semibold mb-2">
@@ -240,14 +241,14 @@
           products: products,
           logo: "Tutor's Corner",
           cartPage: false,
-
-          // Cart
           cart: [],
           sort: {
             sortBy: "subject",
             orderBy: "ascending",
           },
+          searchQuery: "",
         },
+        
 
         methods: {
           // To add items to cart
@@ -261,7 +262,7 @@
             }
           },
 
-        
+        // Switch between cart and product page
           toggleTo() {
             this.cartPage = !this.cartPage;
           },
@@ -274,10 +275,17 @@
          this.cart.splice(this.cart.indexOf(product), 1);
         },
 
-    //     addBackToProductList(product) {
-    //     // Add the product back to the product list
-    //     this.products.push(product);
-    // }
+        searchProducts() {
+        const query = this.searchQuery.toLowerCase().trim();
+
+        this.products = this.products.filter(product => {
+        return (
+          product.subject.toLowerCase().includes(query) ||
+            product.location.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query)
+            );
+        });
+    },
 },
 
         computed: {
