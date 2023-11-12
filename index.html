@@ -33,7 +33,7 @@
           />
         </div>
         <!-- button -->
-        <button
+        <button v-on:click="toggleTo"
           class="bg-orange-500 text-white py-2 px-4 rounded"
           :disabled="cart.length === 0"
         >
@@ -43,7 +43,14 @@
         </button>
       </div>
 
-    <div class="flex flex-col md:flex-row h-screen bg-gray-200">
+    <!-- Cart Page -->
+    <div v-if="cartPage">
+        <h1>CART PAGE</h1>
+    </div>
+
+    <!-- Product Page -->
+    <div class="productPage" v-if="!cartPage">
+    <div class="flex flex-col md:flex-row h-screen bg-white-200">
         <!-- Sidebar -->
         <div class="w-full md:w-64 bg-white p-4">
           <h1 class="text-2xl font-bold mb-4">Filters</h1>
@@ -143,9 +150,10 @@
             </div>
           </div>
         </div> 
-    </div>
+    
 
-    <!-- Main Content -->
+        
+        <!-- Main Content -->
         <div class="flex-1 p-8">
           <!-- Card Grid -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -183,10 +191,12 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
+        </div>
     
+      </div>
+  </div>
+   
+
     <script>
       var vm = new Vue({
         el: "#app",
@@ -194,7 +204,8 @@
           products: products,
           logo: "Tutor's Corner",
 
-          displayProducts: true,
+        //   productPage: "products",
+          cartPage: false,
 
           // Cart
           cart: [],
@@ -215,6 +226,10 @@
               product.availability -= 1;
             }
           },
+
+          toggleTo() {
+            this.cartPage = !this.cartPage;
+          }
         },
 
         computed: {
